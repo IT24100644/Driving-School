@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Register - Driving School</title>
+    <title>Login - Driving School</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -10,26 +10,17 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="text-center">Register Account</h4>
+                    <h4 class="text-center">Login to Your Account</h4>
                 </div>
                 <div class="card-body">
                     <% if (request.getParameter("error") != null) { %>
                     <div class="alert alert-danger">${param.error}</div>
                     <% } %>
+                    <% if (request.getParameter("success") != null) { %>
+                    <div class="alert alert-success">${param.success}</div>
+                    <% } %>
 
-                    <form action="${pageContext.request.contextPath}/user/register" method="post">
-                        <div class="mb-3">
-                            <label class="form-label">Account Type</label>
-                            <select class="form-select" name="role" required>
-                                <option value="">Select Role</option>
-                                <option value="STUDENT">Student</option>
-                                <option value="INSTRUCTOR">Instructor</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" class="form-control" name="name" required>
-                        </div>
+                    <form action="${pageContext.request.contextPath}/user/login" method="post">
                         <div class="mb-3">
                             <label class="form-label">Email Address</label>
                             <input type="email" class="form-control" name="email" required>
@@ -39,11 +30,11 @@
                             <input type="password" class="form-control" name="password" required>
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Register</button>
+                            <button type="submit" class="btn btn-primary">Login</button>
                         </div>
                     </form>
                     <div class="mt-3 text-center">
-                        Already have an account? <a href="${pageContext.request.contextPath}/user/login">Login here</a>
+                        Don't have an account? <a href="${pageContext.request.contextPath}/user/register">Register here</a>
                     </div>
                 </div>
             </div>
