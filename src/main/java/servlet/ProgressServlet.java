@@ -100,7 +100,12 @@ public class ProgressServlet extends HttpServlet {
         Progress progress = progressService.getProgressByStudentId(studentId);
 
         if (progress != null) {
-            Student student = (Student) userService.getUserById(studentId);
+            User user = userService.getUserById(studentId)
+                    .orElseThrow(() -> new IllegalArgumentException("Student not found for ID: " + studentId));
+            if (!(user instanceof Student)) {
+                throw new IllegalArgumentException("User with ID " + studentId + " is not a Student");
+            }
+            Student student = (Student) user;
             request.setAttribute("progress", progress);
             request.setAttribute("student", student);
             request.getRequestDispatcher("/views/progress/report.jsp").forward(request, response);
@@ -132,14 +137,15 @@ public class ProgressServlet extends HttpServlet {
         String studentId = request.getParameter("studentId");
         String lessonId = request.getParameter("lessonId");
 
-        Student student = (Student) userService.getUserById(studentId);
-        if (student != null) {
-            request.setAttribute("student", student);
-            request.setAttribute("lessonId", lessonId);
-            request.getRequestDispatcher("/views/progress/feedback-form.jsp").forward(request, response);
-        } else {
-            response.sendRedirect(request.getContextPath() + "/progress/dashboard?error=Student not found");
+        User user = userService.getUserById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found for ID: " + studentId));
+        if (!(user instanceof Student)) {
+            throw new IllegalArgumentException("User with ID " + studentId + " is not a Student");
         }
+        Student student = (Student) user;
+        request.setAttribute("student", student);
+        request.setAttribute("lessonId", lessonId);
+        request.getRequestDispatcher("/views/progress/feedback-form.jsp").forward(request, response);
     }
 
     private void submitFeedback(HttpServletRequest request, HttpServletResponse response)
